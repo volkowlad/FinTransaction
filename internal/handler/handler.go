@@ -16,6 +16,9 @@ func NewHandler(services *service.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
+	router.Use(RateLimiterMW())
+	router.Use(gin.Recovery())
+
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sing-up", h.signUp)

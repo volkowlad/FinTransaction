@@ -108,17 +108,6 @@ func (w *WalletDB) Transfer(userID, id int, wallet fin.TransferWallet) (int, err
 		return 0, fmt.Errorf("failed to transfer wallet query2: %w", err)
 	}
 
-	//queryUserID := fmt.Sprintf(`
-	//							SELECT id FROM %s
-	//							WHERE username=$1`, walletTable)
-	//
-	//var TransferUserID int
-	//err = tx.QueryRow(queryUserID, wallet.Username).Scan(&TransferUserID)
-	//if err != nil {
-	//	tx.Rollback()
-	//	return 0, fmt.Errorf("failed to transfer wallet query2: %w", err)
-	//}
-
 	queryTransferBalance := fmt.Sprintf(`
 								SELECT balance FROM %s
 								WHERE user_id=$1`, walletTable)

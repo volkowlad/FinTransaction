@@ -3,8 +3,10 @@ package handler
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/time/rate"
 	"net/http"
 	"strings"
+	"time"
 )
 
 const userCtx = "userID"
@@ -44,4 +46,16 @@ func getUserID(c *gin.Context) (int, error) {
 	}
 
 	return idInt, nil
+}
+
+func RateLimiterMW() gin.HandlerFunc {
+	limiter := rate.NewLimiter(rate.Every(time.Second), 1000)
+	return func(c *gin.Context) {
+
+		if limiter.Allow() {
+			c.Next()
+		} else {
+			NewRespError(c, http.StatusTooManyRequests, "too many requests")
+		}
+	}
 }

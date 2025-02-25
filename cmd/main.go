@@ -48,6 +48,8 @@ func main() {
 
 	log.Info("http server started")
 
+	//transaction_api.Start()
+
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
