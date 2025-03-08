@@ -5,6 +5,8 @@ import (
 	"FinTransaction/internal/repository"
 )
 
+//go:generate mockgen -source=service.go -destination=mock/mock.go
+
 type Authorization interface {
 	CreateUser(user fin.User) (int, error)
 	GenerateToken(username, password string) (string, error)
@@ -19,14 +21,20 @@ type Wallet interface {
 	Transfer(userID, id int, input fin.TransferWallet) (int, error)
 }
 
+type History interface {
+	HistoryWallet(userID int) ([]fin.History, error)
+}
+
 type Service struct {
 	Authorization
 	Wallet
+	History
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
 		Wallet:        NewWalletService(repos.Wallet),
+		History:       NewHistoryService(repos.History),
 	}
 }

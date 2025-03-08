@@ -96,7 +96,6 @@ func (w *WalletDB) Transfer(userID, id int, wallet fin.TransferWallet) (int, err
 		return 0, fmt.Errorf("failed to transfer wallet query1: %w", err)
 	}
 
-	slog.Info(wallet.Username, wallet.Amount)
 	queryTransferUserID := fmt.Sprintf(`
 								SELECT id FROM %s
 								WHERE username=$1`, usersTable)
@@ -121,6 +120,22 @@ func (w *WalletDB) Transfer(userID, id int, wallet fin.TransferWallet) (int, err
 
 	newTransferBalance := transferBalance + wallet.Amount
 	newMyBalance := myBalance - wallet.Amount
+
+	queryHistoryMyWallet := fmt.Sprintf(`INSERT INTO %s (user_id, act, money) VALUES ($1, $2, $3)`, historyTable)
+	_, err = tx.Exec(queryHistoryMyWallet, userID, "Withdraw", wallet.Amount)
+	if err != nil {
+		tx.Rollback()
+		slog.Error("failed to transfer wallet query1", err)
+		return 0, err
+	}
+
+	queryHistoryWallet := fmt.Sprintf(`INSERT INTO %s (user_id, act, money) VALUES ($1, $2, $3)`, historyTable)
+	_, err = tx.Exec(queryHistoryWallet, transferUserID, "Deposit", wallet.Amount)
+	if err != nil {
+		tx.Rollback()
+		slog.Error("failed to transfer wallet query1", err)
+		return 0, err
+	}
 
 	queryMyUpdate := fmt.Sprintf(`
 								UPDATE %s 

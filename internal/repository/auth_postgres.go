@@ -25,6 +25,15 @@ func (r *AuthPostgres) CreateUser(user fin.User) (int, error) {
 }
 
 func (r *AuthPostgres) GetUser(username, password string) (fin.User, error) {
+	//defer func() {
+	//	switch err {
+	//	case nil:
+	//		err = tx.Commit()
+	//	default:
+	//		tx.Rollback()
+	//	}
+	//}()
+
 	var user fin.User
 	query := fmt.Sprintf("SELECT * FROM %s WHERE username = $1 AND password = $2", usersTable)
 	err := r.db.QueryRow(query, username, password).Scan(&user.ID, &user.Name, &user.Username, &user.Password)

@@ -3,6 +3,10 @@ package handler
 import (
 	"FinTransaction/internal/service"
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
+
+	_ "FinTransaction/docs"
 )
 
 type Handler struct {
@@ -17,12 +21,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
 	router.Use(RateLimiterMW())
-	router.Use(gin.Recovery())
 
 	auth := router.Group("/auth")
 	{
-		auth.POST("/sing-up", h.signUp)
-		auth.POST("/sing-in", h.singIn)
+		auth.POST("/sign-up", h.signUp)
+		auth.POST("/sign-in", h.singIn)
 	}
 
 	wallet := router.Group("/api", h.userIdentity)
@@ -32,7 +35,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		wallet.GET("/:id", h.getWallet)
 		wallet.PUT("/:id", h.updateWallet)
 		wallet.DELETE("/:id", h.deleteWallet)
+		wallet.GET("/history/:id", h.historyWallet)
 	}
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return router
 }

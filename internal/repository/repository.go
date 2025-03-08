@@ -18,14 +18,20 @@ type Wallet interface {
 	Transfer(userID, id int, input fin.TransferWallet) (int, error)
 }
 
+type History interface {
+	History(userID int) ([]fin.History, error)
+}
+
 type Repository struct {
 	Authorization
 	Wallet
+	History
 }
 
 func NewRepository(db *sql.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthDB(db),
 		Wallet:        NewWalletDB(db),
+		History:       NewHistoryDB(db),
 	}
 }
