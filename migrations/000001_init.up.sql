@@ -12,3 +12,11 @@ CREATE TABLE wallet
     user_id INTEGER REFERENCES users (id) ON DELETE CASCADE NOT NULL,
     balance INT
 );
+
+CREATE TABLE history
+(
+    id serial NOT NULL UNIQUE ,
+    user_id INTEGER REFERENCES users (id) ON DELETE CASCADE NOT NULL,
+    act VARCHAR(255) NOT NULL,
+    money INT
+);

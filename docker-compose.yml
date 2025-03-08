@@ -22,7 +22,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     healthcheck:
       test: pg_isready --username "postgres" --dbname "postgres"
       interval: 1s

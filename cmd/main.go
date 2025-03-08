@@ -15,6 +15,16 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// @title Fin Transaction API
+// @version 1.0.0
+// @description API Server for Fin Application
+
+// @host localhost:8080
+// @BasePath /
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	cfg := config.InitConfig()
 

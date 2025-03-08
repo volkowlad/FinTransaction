@@ -3,8 +3,10 @@ package handler
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/time/rate"
 	"net/http"
 	"strings"
+	"time"
 )
 
 const userCtx = "userID"
@@ -19,6 +21,14 @@ func (h *Handler) userIdentity(c *gin.Context) {
 	headerParts := strings.Split(header, " ")
 	if len(headerParts) != 2 {
 		NewRespError(c, http.StatusUnauthorized, "invalid auth header")
+	}
+
+	if headerParts[0] != "Bearer" {
+		NewRespError(c, http.StatusUnauthorized, "invalid auth header")
+	}
+
+	if headerParts[1] == "" {
+		NewRespError(c, http.StatusUnauthorized, "token is empty")
 	}
 
 	//parse token
@@ -44,4 +54,16 @@ func getUserID(c *gin.Context) (int, error) {
 	}
 
 	return idInt, nil
+}
+
+func RateLimiterMW() gin.HandlerFunc {
+	limiter := rate.NewLimiter(rate.Every(time.Second), 1000)
+	return func(c *gin.Context) {
+
+		if limiter.Allow() {
+			c.Next()
+		} else {
+			NewRespError(c, http.StatusTooManyRequests, "too many requests")
+		}
+	}
 }

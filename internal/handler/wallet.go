@@ -4,10 +4,24 @@ import (
 	fin "FinTransaction"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"log/slog"
+	"log"
 	"net/http"
 	"strconv"
 )
+
+// @Summary Create wallet
+// @Security ApiKeyAuth
+// @Tags wallets
+// @Description create wallet
+// @ID create-wallet
+// @Accept  json
+// @Produce  json
+// @Param input body FinTransaction.Wallet true "wallet info"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api [post]
 
 func (h *Handler) createWallets(c *gin.Context) {
 	userID, err := getUserID(c)
@@ -30,12 +44,25 @@ func (h *Handler) createWallets(c *gin.Context) {
 		"id": id,
 	})
 
-	slog.Info("Created wallet: ", id)
+	log.Printf("Created wallet: %d", id)
 }
 
 type getAllWalletsResponse struct {
 	Data []fin.Wallet `json:"wallets"`
 }
+
+// @Summary Get All Wallets
+// @Security ApiKeyAuth
+// @Tags wallets
+// @Description get all wallets
+// @ID get-all-wallets
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} getAllWalletsResponse
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api [get]
 
 func (h *Handler) getAllWallets(c *gin.Context) {
 	userID, err := getUserID(c)
@@ -55,6 +82,19 @@ func (h *Handler) getAllWallets(c *gin.Context) {
 
 	fmt.Printf("take all wallets: %d", userID)
 }
+
+// @Summary Get Wallet
+// @Security ApiKeyAuth
+// @Tags wallets
+// @Description get wallet
+// @ID get-wallet
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} FinTransaction.Wallet
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api/:id [get]
 
 func (h *Handler) getWallet(c *gin.Context) {
 	userID, err := getUserID(c)
@@ -78,6 +118,19 @@ func (h *Handler) getWallet(c *gin.Context) {
 
 	fmt.Printf("take wallet: %d", id)
 }
+
+// @Summary Update Wallet
+// @Security ApiKeyAuth
+// @Tags wallets
+// @Description update wallet
+// @ID update-wallet
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} FinTransaction.TransferWallet
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api/:id [update]
 
 func (h *Handler) updateWallet(c *gin.Context) {
 	userID, err := getUserID(c)
@@ -109,6 +162,19 @@ func (h *Handler) updateWallet(c *gin.Context) {
 
 	fmt.Printf("new balance: %d", id)
 }
+
+// @Summary Delete Wallet
+// @Security ApiKeyAuth
+// @Tags wallets
+// @Description delete wallet
+// @ID delete-wallet
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} statusResp
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api/:id [delete]
 
 func (h *Handler) deleteWallet(c *gin.Context) {
 	userID, err := getUserID(c)
