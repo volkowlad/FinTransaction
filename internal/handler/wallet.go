@@ -18,11 +18,10 @@ import (
 // @Produce  json
 // @Param input body FinTransaction.Wallet true "wallet info"
 // @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
 // @Router /api [post]
-
 func (h *Handler) createWallets(c *gin.Context) {
 	userID, err := getUserID(c)
 	if err != nil {
@@ -59,11 +58,10 @@ type getAllWalletsResponse struct {
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} getAllWalletsResponse
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
 // @Router /api [get]
-
 func (h *Handler) getAllWallets(c *gin.Context) {
 	userID, err := getUserID(c)
 	if err != nil {
@@ -91,11 +89,10 @@ func (h *Handler) getAllWallets(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} FinTransaction.Wallet
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
 // @Router /api/:id [get]
-
 func (h *Handler) getWallet(c *gin.Context) {
 	userID, err := getUserID(c)
 	if err != nil {
@@ -127,11 +124,10 @@ func (h *Handler) getWallet(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} FinTransaction.TransferWallet
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
-// @Router /api/:id [update]
-
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
+// @Router /api/:id [put]
 func (h *Handler) updateWallet(c *gin.Context) {
 	userID, err := getUserID(c)
 	if err != nil {
@@ -171,11 +167,10 @@ func (h *Handler) updateWallet(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} statusResp
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
 // @Router /api/:id [delete]
-
 func (h *Handler) deleteWallet(c *gin.Context) {
 	userID, err := getUserID(c)
 	if err != nil {
