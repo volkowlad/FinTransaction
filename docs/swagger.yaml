@@ -1,11 +1,365 @@
 basePath: /
+definitions:
+  FinTransaction.History:
+    properties:
+      action:
+        type: string
+      id:
+        type: integer
+      money:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  FinTransaction.TransferWallet:
+    properties:
+      amount:
+        type: integer
+      transfer_username:
+        type: string
+    type: object
+  FinTransaction.User:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - name
+    - password
+    - username
+    type: object
+  FinTransaction.Wallet:
+    properties:
+      balance:
+        type: integer
+      id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  handler.getAllWalletsResponse:
+    properties:
+      wallets:
+        items:
+          $ref: '#/definitions/FinTransaction.Wallet'
+        type: array
+    type: object
+  handler.respError:
+    properties:
+      massage:
+        type: string
+    type: object
+  handler.signInInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  handler.statusResp:
+    properties:
+      status:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
   description: API Server for Fin Application
   title: Fin Transaction API
   version: 1.0.0
-paths: {}
+paths:
+  /api:
+    get:
+      consumes:
+      - application/json
+      description: get all wallets
+      operationId: get-all-wallets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getAllWalletsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get All Wallets
+      tags:
+      - wallets
+    post:
+      consumes:
+      - application/json
+      description: create wallet
+      operationId: create-wallet
+      parameters:
+      - description: wallet info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/FinTransaction.Wallet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Create wallet
+      tags:
+      - wallets
+  /api/:id:
+    delete:
+      consumes:
+      - application/json
+      description: delete wallet
+      operationId: delete-wallet
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.statusResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Wallet
+      tags:
+      - wallets
+    get:
+      consumes:
+      - application/json
+      description: get wallet
+      operationId: get-wallet
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FinTransaction.Wallet'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Wallet
+      tags:
+      - wallets
+    put:
+      consumes:
+      - application/json
+      description: update wallet
+      operationId: update-wallet
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FinTransaction.TransferWallet'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Wallet
+      tags:
+      - wallets
+  /api/history/:id:
+    get:
+      consumes:
+      - application/json
+      description: wallet history
+      operationId: wallet-history
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/FinTransaction.History'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Wallet History
+      tags:
+      - history
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: login
+      operationId: login
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.signInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: token
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      summary: SignIn
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: create account
+      operationId: create-account
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/FinTransaction.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.respError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.respError'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.respError'
+      summary: SignUp
+      tags:
+      - auth
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -13,13 +13,12 @@ import (
 // @ID create-account
 // @Accept  json
 // @Produce  json
-// @Param input body FinTransaction.User true "account info"
+// @Param input body fin.User true "account info"
 // @Success 200 {integer} integer 1
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
 // @Router /auth/sign-up [post]
-
 func (h *Handler) signUp(c *gin.Context) {
 	var input fin.User
 
@@ -53,11 +52,10 @@ type signInInput struct {
 // @Produce  json
 // @Param input body signInInput true "credentials"
 // @Success 200 {string} string "token"
-// @Failure 400,404 {object} errorResponse
-// @Failure 500 {object} errorResponse
-// @Failure default {object} errorResponse
+// @Failure 400,404 {object} respError
+// @Failure 500 {object} respError
+// @Failure default {object} respError
 // @Router /auth/sign-in [post]
-
 func (h *Handler) singIn(c *gin.Context) {
 	var input signInInput
 
